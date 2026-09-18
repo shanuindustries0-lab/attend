@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import { addEmployee, updateEmployeeSalary } from "@/app/actions/employees";
+import RemoveEmployeeButton from "@/components/employees/RemoveEmployeeButton";
 
 type Category = { id: string; name_en: string };
 type Employee = {
@@ -237,6 +238,9 @@ export default function EmployeeManager({
                     </button>
                   </div>
                 )}
+
+                {/* NEW: Remove Employee Button */}
+                <RemoveEmployeeButton employeeId={emp.id} />
               </div>
             </div>
           ))}

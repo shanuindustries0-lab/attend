@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import EmployeeManager from "@/components/employees/EmployeeManager";
 
+
 export default async function EmployeesPage() {
   const supabase = await createClient();
 
