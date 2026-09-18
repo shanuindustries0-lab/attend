@@ -21,9 +21,11 @@ export type WeeklyReportData = {
 
 export function calculateWeeklyAttendance(
   weekDates: string[],
-  attendanceMap: Record<string, AttendanceStatus>, 
+  attendanceMap: Record<string, any>,
+  holidayMap: Record<string, { title: string }>, // Make sure this line exists!
   currentDateStr: string,
 ): WeeklyReportData {
+
   const report: WeeklyReportData = {
     present: 0,
     absent: 0,

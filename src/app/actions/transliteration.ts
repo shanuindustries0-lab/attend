@@ -2,7 +2,7 @@
 
 export async function suggestHindiTransliteration(
   englishText: string,
-): Promise {
+): Promise<any> {
   if (!englishText || !englishText.trim()) return "";
 
   try {
