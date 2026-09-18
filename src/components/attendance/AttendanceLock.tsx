@@ -40,7 +40,7 @@ export default function AttendanceLock({
     setIsLocked(newStatus);
     onLockChange(newStatus);
 
-    const result = await toggleWeekLock(weekStartDate, newStatus);
+    const result = await toggleLock(weekStartDate, newStatus);
     if (!result.success) {
       setIsLocked(!newStatus);
       onLockChange(!newStatus);

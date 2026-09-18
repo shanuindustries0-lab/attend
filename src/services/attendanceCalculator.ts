@@ -21,8 +21,7 @@ export type WeeklyReportData = {
 
 export function calculateWeeklyAttendance(
   weekDates: string[],
-  attendanceMap: Record,
-  holidayMap: Record,
+  attendanceMap: Record<string, AttendanceStatus>, 
   currentDateStr: string,
 ): WeeklyReportData {
   const report: WeeklyReportData = {

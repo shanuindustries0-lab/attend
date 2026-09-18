@@ -9,6 +9,7 @@ interface Props {
   employees: any[];
   initialAttendance: Record<string, AttendanceStatus>;
   holidays: Record<string, { title: string }>;
+  isLocked?: boolean;
 }
 
 export default function AttendanceGrid({
