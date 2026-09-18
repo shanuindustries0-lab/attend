@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { toggleWeekLock } from "@/app/actions/locks";
+import { toggleAttendanceLock as toggleLock } from "@/app/actions/locks";
 import { formatShortDate } from "@/lib/dateUtils";
 
 interface Props {
