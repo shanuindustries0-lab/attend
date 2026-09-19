@@ -12,8 +12,8 @@ export async function GET(request: Request) {
     // 1. Authenticate with the Google Service Account
     const auth = new google.auth.GoogleAuth({
       credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        // The replace function prevents Vercel from corrupting the line breaks in your key
+        client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+
         private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
       },
       scopes: ["https://www.googleapis.com/auth/drive.file"],
