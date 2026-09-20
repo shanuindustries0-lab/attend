@@ -1,5 +1,6 @@
 "use server";
 
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 
 export async function markAsPaid(
@@ -22,6 +23,8 @@ export async function markAsPaid(
   return { success: !error, error: error?.message };
 }
 
+
+
 export async function checkPaymentStatus(
   employeeIds: string[],
   startDate: string,
@@ -40,4 +43,32 @@ export async function checkPaymentStatus(
     paidMap[p.employee_id] = true;
   });
   return paidMap;
+}
+
+export async function unmarkAsPaid(
+  empId: string,
+  startDate: string,
+  endDate: string,
+) {
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
+    // Use the renamed admin client which accepts the URL and Key arguments
+    const supabase = createAdminClient(supabaseUrl, supabaseServiceKey);
+
+   const { error } = await supabase
+     .from("payments")
+     .delete()
+     .eq("employee_id", empId)
+     .eq("start_date", startDate)
+     .eq("end_date", endDate);
+
+    if (error) throw error;
+    return { success: true };
+  } catch (e) {
+    const error = e as Error; 
+    console.error("Unmark error:", error);
+    return { success: false, error: error.message };
+  }
 }

@@ -2,7 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { AttendanceStatus } from "@/app/actions/attendance";
-import { markAsPaid, checkPaymentStatus } from "@/app/actions/payments";
+import {
+  markAsPaid,
+  checkPaymentStatus,
+  unmarkAsPaid,
+} from "@/app/actions/payments";
 
 interface Props {
   weekDates: string[];
@@ -46,7 +50,22 @@ export default function AttendanceGrid({
     if (res.success) setPaidMap((prev) => ({ ...prev, [empId]: true }));
     setLoadingMap((prev) => ({ ...prev, [empId]: false }));
   };
+  const handleUnmarkPaid = async (empId: string) => {
+    setLoadingMap((prev) => ({ ...prev, [empId]: true }));
+    const res = await unmarkAsPaid(
+      empId,
+      weekDates[0],
+      weekDates[weekDates.length - 1],
+    );
 
+    if (res.success) {
+      setPaidMap((prev) => ({ ...prev, [empId]: false }));
+    } else {
+      alert("Failed to unmark: " + res.error); 
+    }
+
+    setLoadingMap((prev) => ({ ...prev, [empId]: false }));
+  };
   const getStatusDisplay = (status?: AttendanceStatus) => {
     switch (status) {
       case "present":
@@ -157,32 +176,45 @@ export default function AttendanceGrid({
                   })}
                 </td>
                 <td className="px-6 py-4 text-center border-gray-200">
-                  {paidMap[emp.id] ? (
-                    <span className="inline-flex items-center gap-1 bg-green-100 text-green-800 text-xs font-bold px-2.5 py-1 rounded-full">
-                      <svg
-                        className="w-3 h-3"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={3}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      PAID
-                    </span>
-                  ) : (
-                    <button
-                      onClick={() => handleMarkPaid(emp.id, weeklyPay)}
-                      disabled={loadingMap[emp.id] || weeklyPay === 0}
-                      className="text-xs font-bold bg-gray-100 hover:bg-emerald-500 hover:text-white text-gray-600 px-3 py-1.5 rounded transition-colors disabled:opacity-50"
-                    >
-                      {loadingMap[emp.id] ? "..." : "Mark Paid"}
-                    </button>
-                  )}
+                  <button
+                    onClick={() =>
+                      paidMap[emp.id]
+                        ? handleUnmarkPaid(emp.id)
+                        : handleMarkPaid(emp.id, weeklyPay)
+                    }
+                    disabled={loadingMap[emp.id] || weeklyPay === 0}
+                    className={`text-xs font-bold px-3 py-1.5 rounded transition-colors disabled:opacity-50 inline-flex items-center justify-center min-w-[100px] ${
+                      paidMap[emp.id]
+                        ? "bg-green-100 text-green-800 hover:bg-red-100 hover:text-red-800 group"
+                        : "bg-gray-100 text-gray-600 hover:bg-emerald-500 hover:text-white"
+                    }`}
+                  >
+                    {loadingMap[emp.id] ? (
+                      "..."
+                    ) : paidMap[emp.id] ? (
+                      <>
+                        <span className="group-hover:hidden flex items-center gap-1">
+                          <svg
+                            className="w-3 h-3"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={3}
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          PAID
+                        </span>
+                        <span className="hidden group-hover:block">UNDO</span>
+                      </>
+                    ) : (
+                      "Mark Paid"
+                    )}
+                  </button>
                 </td>
               </tr>
             );

@@ -5,7 +5,6 @@ import AttendanceLock from "@/components/attendance/AttendanceLock";
 import AttendanceGrid from "@/components/attendance/AttendanceGrid";
 import AttendanceControls from "@/components/attendance/AttendanceControls";
 import { AttendanceStatus } from "@/app/actions/attendance";
-
 interface Props {
   weekDates: string[];
   employees: any[];
