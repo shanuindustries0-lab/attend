@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
+import Link from "next/link"; // Added Link import
 
 interface Props {
   currentStartDate: string;
@@ -30,14 +31,13 @@ export default function AttendanceControls({
     const targetDate = new Date(d.getTime() - d.getTimezoneOffset() * 60000)
       .toISOString()
       .split("T")[0];
-    router.push(`/weekly-review?date=${targetDate}`); // Fixed route
+    router.push(`/weekly-review?date=${targetDate}`);
   };
 
   const handleDateJump = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value) router.push(`/weekly-review?date=${e.target.value}`); // Fixed route
+    if (e.target.value) router.push(`/weekly-review?date=${e.target.value}`);
   };
 
-  // Filter for suggestions based on user input
   const suggestions = employees
     .filter(
       (emp) =>
@@ -45,7 +45,7 @@ export default function AttendanceControls({
         (emp.employee_code &&
           emp.employee_code.toLowerCase().includes(searchInput.toLowerCase())),
     )
-    .slice(0, 5); // Limit to top 5 suggestions
+    .slice(0, 5);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 justify-between items-center bg-white p-4 rounded-lg shadow-sm border border-gray-200 mb-4">
@@ -60,12 +60,10 @@ export default function AttendanceControls({
             setShowSuggestions(true);
           }}
           onFocus={() => setShowSuggestions(true)}
-          // 200ms delay to allow the click event on the suggestion to fire before closing
           onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
           className="w-full p-2 text-sm border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 outline-none"
         />
 
-        {/* Suggestion Dropdown (Triggers at 2+ characters) */}
         {showSuggestions &&
           searchInput.length >= 2 &&
           suggestions.length > 0 && (
@@ -117,6 +115,14 @@ export default function AttendanceControls({
         >
           Next Week &rarr;
         </button>
+
+        {/* NEW PAYROLL BUTTON */}
+        <Link
+          href={`/weekly-payroll?date=${currentStartDate}`}
+          className="px-3 py-2 text-sm font-bold text-white bg-green-600 hover:bg-green-700 rounded transition-colors ml-2"
+        >
+          View Payroll Report
+        </Link>
       </div>
     </div>
   );
