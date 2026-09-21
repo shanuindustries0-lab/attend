@@ -29,8 +29,12 @@ export default async function AnalyticsDashboard() {
     if (record.status === "absent") {
       totalAbsent++;
 
-      // Track frequent absentees
-      const empName = record.employees?.name_en || "Unknown";
+      // Safely extract the employee name for strict TypeScript builds
+      const empData = record.employees as any;
+      const empName = Array.isArray(empData)
+        ? empData[0]?.name_en
+        : empData?.name_en || "Unknown";
+
       if (!absenceLedger[record.employee_id]) {
         absenceLedger[record.employee_id] = { name: empName, count: 0 };
       }
