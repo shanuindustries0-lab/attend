@@ -123,6 +123,12 @@ export default function AttendanceControls({
         >
           View Payroll Report
         </Link>
+        <Link
+          href="/analytics"
+          className="px-3 py-2 text-sm font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 rounded transition-colors ml-2"
+        >
+          View Analytics
+        </Link>
       </div>
     </div>
   );
