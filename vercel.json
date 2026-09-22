@@ -2,7 +2,11 @@
   "crons": [
     {
       "path": "/api/cron/daily-backup",
-      "schedule": "30 16 * * *"
+      "schedule": "0 2 * * *"
+    },
+    {
+      "path": "/api/cron/weekly-payslips",
+      "schedule": "0 20 * * 0"
     }
   ]
 }
